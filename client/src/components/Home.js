@@ -1,58 +1,28 @@
 import React, { useEffect, useState } from 'react'
+import { fetchData } from '../helper/helper'
 
 function Home (props) {
   const [isAuth, setisAuth] = useState(false)
-  const [data, setData] = useState({ hits: [] })
-  const [orgs, setOrgs] = useState({ hits: [] })
-  const [isLoading, setisLoading] = useState(false)
+  const [orgData, setOrgData] = useState([])
+  const [user, setUser] = useState({ hits: [] })
+  const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
 
   useEffect(() => {
-    console.log(props)
-    if (props.location.search !== '') {
-      const query = props.location.search.substring(1)
-      const token = query.split('access_token=')[1]
-      console.log(token)
+    if (props.location.search) {
+      const token = props.location.search
+        .substring(1)
+        .split('access_token=')[1]
+
       setisAuth(true)
       props.history.push('/home')
 
-      const fetchData = async () => {
-        setisLoading(true)
-
-        try {
-          const url = 'https://api.github.com/user'
-          const response = await window.fetch(url, {
-            headers: { Authorization: 'token ' + token }
-          })
-          const result = await response.json()
-          console.log(result)
-          setOrgs(result)
-          setisLoading(false)
-        } catch (error) {
-          setIsError(true)
-        }
+      try {
+        fetchData('https://api.github.com/user', token, setUser, setIsLoading)
+        fetchData('https://api.github.com/user/orgs', token, setOrgData, setIsLoading, orgData.name)
+      } catch (error) {
+        setIsError(true)
       }
-
-      const fetchOrgs = async () => {
-        try {
-          const response = await window.fetch('https://api.github.com/user/orgs', {
-            headers: {
-              Authorization: 'token ' + token,
-              'user-agent': data.name
-            }
-          })
-          const result = await response.json()
-          console.log(result)
-          setData(result)
-          setisLoading(false)
-        } catch (error) {
-          setIsError(true)
-        }
-      }
-
-      fetchData()
-      fetchOrgs()
-      console.log(orgs)
     }
   }, [])
 
@@ -63,7 +33,8 @@ function Home (props) {
         {isError && <div>Something went wrong ...</div>}
         {isLoading && <p className='App-logo'>Loading</p>}
         <div>
-          <p>{orgs.name} from {orgs.location}</p>
+          <p>{user.name} from {user.location}</p>
+          {orgData.map((d, i) => <p key={i}>{d.login}</p>)}
         </div>
       </div>
     )
