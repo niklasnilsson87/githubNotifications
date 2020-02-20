@@ -21,7 +21,7 @@ module.exports.token = async event => {
   return {
     statusCode: 303,
     headers: {
-      Location: `https://github.niklasdeveloper.nu/home?access_token=${access_token}` // eslint-disable-line
+      Location: `http://localhost:3000/dashboard?access_token=${access_token}` // eslint-disable-line
     }
   }
 }
