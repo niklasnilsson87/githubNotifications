@@ -5,7 +5,7 @@ function Login () {
 
   return (
     <div className='login'>
-      <a href={`https://github.com/login/oauth/authorize?client_id=${clientID}&scope=user`}>
+      <a href={`https://github.com/login/oauth/authorize?client_id=${clientID}&scope=user,repo,admin,org_hook&redirect_url='${window.location.href}'`}>
         Login to github
       </a>
     </div>

@@ -117,3 +117,19 @@ functions:
 #     NewOutput:
 #       Description: "Description for the output"
 #       Value: "Some output value"
+plugins:
+  - serverless-finch
+  - serverless-domain-manager
+
+custom:
+  client:
+    bucketName: github.niklasdeveloper.nu
+    distributionFolder: ../client/build
+    indexDocument: index.html
+    errorDocument: index.html
+  customDomain:
+    domainName: github-server.niklasdeveloper.nu
+    basePath: ''
+    stage: ${self:provider.stage}
+    createRoute53Record: true
+
