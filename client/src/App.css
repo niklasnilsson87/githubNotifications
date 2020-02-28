@@ -1,6 +1,3 @@
-.App {
-  text-align: center;
-}
 
 .App-logo {
   height: 4vmin;
@@ -11,10 +8,6 @@
   .App-logo {
     animation: App-logo-spin infinite 300ms linear;
   }
-}
-
-.main-card {
-  height: 400px;
 }
 
 .App-header {
@@ -39,4 +32,43 @@
   to {
     transform: rotate(360deg);
   }
+}
+.login {
+  max-width: 350px;
+  margin: 0 auto;
+}
+
+.flex {
+  display: flex;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.logo {
+  font-size: 24px;
+}
+
+.gh-icon {
+  max-width: 100px;
+  margin: 0 auto;
+}
+
+.min-height-90vh {
+  min-height: 90vh !important;
+}
+
+.route-links li {
+  margin-bottom: 8px;
+}
+
+.route-links li a {
+  margin-bottom: 8px;
+  color: white;
+  text-decoration: none;
 }

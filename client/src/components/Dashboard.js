@@ -1,64 +1,63 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import Store from '../context/store'
 
-function Dashboard (props) {
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+
+import Navigation from './Navigation'
+
+import Notifications from './Notifications'
+import Settings from './Settings'
+import Repositories from './Repositories'
+
+function Dashboard () {
   const context = useContext(Store)
-  const [isLoading, setIsLoading] = useState(false)
-  const [isError, setIsError] = useState(false)
+  return (
+    <div className='dashboard'>
+      <Router>
+        {context.error.isError && <div>Something went wrong ...</div>}
+        {context.isLoading
+          ? <p className='App-logo'>Loading</p>
+          : (
+            <div className='row'>
+              <div className='col s2 grey darken-3'>
+                <div className='container'>
+                  <Navigation />
+                </div>
+              </div>
+              <div className='col s10 blue min-height-90vh'>
+                <div className='container'>
+                  <div className='flex align-center justify-between'>
+                    <label className='white-text' htmlFor='org-selector'>Select organization</label>
+                    <select id='org-selector' className='browser-default'>
+                      {context.orgData.map((d, i) => <option key={i}>{d.login}</option>)}
+                    </select>
 
-  useEffect(() => {
-    if (props.location.search) {
-      const token = props.location.search.substring(1).split('access_token=')[1]
-      context.authenticate(token)
+                  </div>
+                  <div className='main-card card center-align'>
+                    <Switch>
+                      <Route exact path='/'>
+                        <h2>Dashboard</h2>
+                      </Route>
+                      <Route path='/notifications'>
+                        <Notifications />
+                      </Route>
+                      <Route path='/repositories'>
+                        <Repositories />
+                      </Route>
+                      <Route path='/settings'>
+                        <Settings />
+                      </Route>
+                    </Switch>
+                    <div className='card-content grey lighten-4' />
+                  </div>
 
-      props.history.push('/dashboard')
-
-      try {
-        context.fetchUser(token, setIsLoading)
-        context.fetchOrg(token, setIsLoading)
-      } catch (error) {
-        setIsError(true)
-      }
-    }
-  }, [])
-
-  if (context.isAuth) {
-    return (
-      <div className='container'>
-        <h1>Dashboard</h1>
-        {isError && <div>Something went wrong ...</div>}
-        {isLoading && <p className='App-logo'>Loading</p>}
-        <div>
-          {/* <p>{context.user.name} from {context.user.location}</p>
-          {context.orgData.map((d, i) => <p key={i}>{d.login}</p>)}
-          <p>{context.name}</p> */}
-        </div>
-        <div class='main-card card center-align hoverable'>
-          <div class='card-tabs'>
-            <ul class='tabs tabs-fixed-width'>
-              <li class='tab'><a href='#test4'>Test 1</a></li>
-              <li class='tab'><a class='active' href='#test5'>Test 2</a></li>
-              <li class='tab'><a href='#test6'>Test 3</a></li>
-            </ul>
-          </div>
-          <div class='card-content'>
-            <p>I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively.</p>
-          </div>
-          <div class='card-content grey lighten-4'>
-            <select className='browser-default'>
-              {context.orgData.map((d, i) => <option key={i}>{d.login}</option>)}
-            </select>
-          </div>
-        </div>
-      </div>
-    )
-  } else {
-    return (
-      <div className='home'>
-        <h1>Please log in</h1>
-      </div>
-    )
-  }
+                </div>
+              </div>
+            </div>
+          )}
+      </Router>
+    </div>
+  )
 }
 
 export default Dashboard

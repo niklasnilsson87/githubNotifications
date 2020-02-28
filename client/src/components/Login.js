@@ -5,9 +5,20 @@ const Login = () => {
 
   return (
     <div className='login'>
-      <a href={`https://github.com/login/oauth/authorize?client_id=${clientID}&scope=user,repo,admin,org_hook`}>
-        Login to github
-      </a>
+      <div className='card center-align'>
+        <div className='card-image'>
+          <img className='gh-icon' src='https://github.githubassets.com/images/modules/open_graph/github-logo.png' />
+        </div>
+        <div className='card-content'>
+          <a
+            href={`https://github.com/login/oauth/authorize?client_id=${clientID}&scope=user,repo,admin:org_hook,admin:repo_hook`}
+            className='btn grey darken-4'
+          >
+            Login to GitHub
+          </a>
+        </div>
+      </div>
+
     </div>
   )
 }

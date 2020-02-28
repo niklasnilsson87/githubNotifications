@@ -2,34 +2,65 @@ import React, { useState } from 'react'
 import Store from './store'
 
 const GlobalState = props => {
-  const [user, setUser] = useState({ hits: [] })
+  const [user, setUser] = useState({})
   const [orgData, setOrgData] = useState([])
   const [accessToken, setToken] = useState()
   const [isAuth, setIsAuth] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState({})
+  const [userSettings, setUserSettings] = useState({})
 
-  const authenticate = token => {
-    // console.log(token)
+  const saveUser = async (user) => {
+    const data = {
+      id: user.id,
+      name: user.name,
+      slackUrl: 'empty'
+    }
+
+    const config = {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }
+
+    const response = await window.fetch('https://github-server.niklasdeveloper.nu/user', config)
+    const result = await response.json()
+    setUserSettings(result)
+  }
+
+  const authenticateToken = token => {
     setToken(token)
     setIsAuth(true)
   }
 
-  const fetchUser = async (token, loading) => {
+  const logout = () => {
+    setUser({})
+    setOrgData([])
+    setToken(null)
+    setIsAuth(false)
+  }
+
+  const fetchUser = async (token) => {
     const url = 'https://api.github.com/user'
-    loading(true)
+    setIsLoading(true)
     const response = await window.fetch(url, {
       headers: {
         Authorization: 'token ' + token
       }
     })
     const result = await response.json()
-    console.log('user', result)
     setUser(result)
-    loading(false)
+    // window.localStorage.setItem('user', result.name)
+    fetchOrg(token)
+    saveUser(result)
+    setIsLoading(false)
   }
 
-  const fetchOrg = async (token, loading) => {
+  const fetchOrg = async (token) => {
     const url = 'https://api.github.com/user/orgs'
-    loading(true)
     const response = await window.fetch(url, {
       headers: {
         Authorization: 'token ' + token,
@@ -37,12 +68,17 @@ const GlobalState = props => {
       }
     })
     const result = await response.json()
-    console.log('orgs', result)
     setOrgData(result)
-    loading(false)
   }
 
-  return <Store.Provider value={{ user, authenticate, fetchUser, fetchOrg, orgData, isAuth }}>{props.children}</Store.Provider>
+  const setErrorState = (e) => {
+    setError({
+      isError: true,
+      message: e
+    })
+  }
+
+  return <Store.Provider value={{ user, error, userSettings, authenticateToken, setErrorState, fetchUser, fetchOrg, logout, orgData, isAuth }}>{props.children}</Store.Provider>
 }
 
 export default GlobalState
