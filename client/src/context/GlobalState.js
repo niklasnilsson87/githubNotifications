@@ -4,6 +4,7 @@ import Store from './store'
 const GlobalState = props => {
   const [user, setUser] = useState({})
   const [orgData, setOrgData] = useState([])
+  const [reposData, setReposData] = useState([])
   const [accessToken, setToken] = useState()
   const [isAuth, setIsAuth] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -43,7 +44,7 @@ const GlobalState = props => {
     setIsAuth(false)
   }
 
-  const fetchUser = async (token) => {
+  const initializeApp = async (token) => {
     const url = 'https://api.github.com/user'
     setIsLoading(true)
     const response = await window.fetch(url, {
@@ -71,6 +72,13 @@ const GlobalState = props => {
     setOrgData(result)
   }
 
+  const getRepos = async (repo) => {
+    const url = `https://api.github.com/orgs/${repo}/repos`
+    const response = await window.fetch(url)
+    const result = await response.json()
+    setReposData(result)
+  }
+
   const setErrorState = (e) => {
     setError({
       isError: true,
@@ -78,7 +86,7 @@ const GlobalState = props => {
     })
   }
 
-  return <Store.Provider value={{ user, error, userSettings, authenticateToken, setErrorState, fetchUser, fetchOrg, logout, orgData, isAuth }}>{props.children}</Store.Provider>
+  return <Store.Provider value={{ user, error, userSettings, authenticateToken, setErrorState, initializeApp, getRepos, fetchOrg, logout, orgData, reposData, isAuth }}>{props.children}</Store.Provider>
 }
 
 export default GlobalState

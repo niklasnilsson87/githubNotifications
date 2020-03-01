@@ -38,6 +38,23 @@
   margin: 0 auto;
 }
 
+.link-container {
+  width: 250px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.not-container {
+  margin-left: 20px;
+  width: 250px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .flex {
   display: flex;
 }
@@ -50,6 +67,16 @@
   align-items: center;
 }
 
+.margin-top50 {
+  margin-top: 50px;
+}
+
+.page li {
+  margin-left: 10px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
 .logo {
   font-size: 24px;
 }
@@ -59,11 +86,43 @@
   margin: 0 auto;
 }
 
+.org-img {
+  width: 50px;
+  padding: 3px;
+}
+
+.user-img {
+  width: 150px;
+  margin-bottom: 15px;
+}
+
+.user-container {
+  text-align: center;
+  border-bottom: 0.2px solid lightgray;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.org-link {
+  margin-left: 15px;
+  font-size: 20px;
+  color: black;
+  transition: 0.3s;
+}
+
+.org-link:hover {
+  font-weight: 20%;
+  font-size: 25px;
+}
+
 .min-height-90vh {
   min-height: 90vh !important;
 }
 
 .route-links li {
+  font-size: 20px;
   margin-bottom: 8px;
 }
 
@@ -71,4 +130,9 @@
   margin-bottom: 8px;
   color: white;
   text-decoration: none;
+}
+
+.font-size20-text-white {
+  font-size: 20px;
+  color: white;
 }

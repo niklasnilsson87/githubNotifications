@@ -22,7 +22,7 @@ const App = () => {
       window.history.pushState({}, document.title, '/')
 
       try {
-        context.fetchUser(token)
+        context.initializeApp(token)
       } catch (error) {
         context.setErrorState(error)
       }
