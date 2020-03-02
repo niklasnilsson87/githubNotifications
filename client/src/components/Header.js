@@ -1,4 +1,5 @@
 import React, { useContext } from 'react'
+
 import Store from '../context/store'
 
 const Header = () => {

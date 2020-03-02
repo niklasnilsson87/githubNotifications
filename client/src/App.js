@@ -10,21 +10,42 @@ import Login from './components/Login.js'
 import Header from './components/Header'
 
 const App = () => {
-  const context = useContext(Store)
+  const { initializeApp, authenticateToken, setErrorState, isAuth } = useContext(Store)
   const [token, setToken] = useState('')
+
+  const getCookie = () => {
+    const cookie = {}
+    document.cookie.split(';').forEach((el) => {
+      const [k, v] = el.split('=')
+      cookie[k.trim()] = v
+    })
+    return cookie.token
+  }
 
   useEffect(() => {
     const token = queryString.parse(window.location.search).access_token
     if (token) {
       setToken(token)
-      context.authenticateToken(token)
+      authenticateToken(token)
 
       window.history.pushState({}, document.title, '/')
 
       try {
-        context.initializeApp(token)
+        initializeApp(token)
       } catch (error) {
-        context.setErrorState(error)
+        setErrorState(error)
+      }
+    } else {
+      const cookie = getCookie()
+
+      if (cookie) {
+        setToken(cookie)
+        try {
+          authenticateToken(cookie)
+          initializeApp(cookie)
+        } catch (error) {
+          setErrorState(error)
+        }
       }
     }
   }, [token])
@@ -32,7 +53,7 @@ const App = () => {
   return (
     <div className='App'>
       <Header />
-      {context.isAuth
+      {isAuth
         ? <Dashboard />
         : <Login />}
 

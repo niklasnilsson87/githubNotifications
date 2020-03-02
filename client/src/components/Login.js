@@ -7,7 +7,7 @@ const Login = () => {
     <div className='login'>
       <div className='card center-align'>
         <div className='card-image'>
-          <img className='gh-icon' src='https://github.githubassets.com/images/modules/open_graph/github-logo.png' />
+          <img className='gh-icon' src='https://github.githubassets.com/images/modules/open_graph/github-logo.png' alt='Github' />
         </div>
         <div className='card-content'>
           <a
