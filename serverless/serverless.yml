@@ -54,6 +54,7 @@ provider:
   environment:
     CLIENT_ID: ${ssm:/user/login/client-id~true}
     CLIENT_SECRET: ${ssm:/user/login/client-secret~true}
+    TABLE_NAME: ${ssm:/user/login/userTable~true}
 
 # you can add packaging information here
 #package:
@@ -78,6 +79,33 @@ functions:
           path: /user
           method: post
           cors: true
+  webhook:
+    handler: webhook.handler
+    events:
+      - http:
+          path: /webhook
+          method: post
+          cors: true
+  websocket-connect:
+    handler: websockets/connect.handler
+    events:
+      - websocket:
+          route: $connect
+  websocket-disconnect:
+    handler: websockets/disconnect.handler
+    events:
+      - websocket:
+          route: $disconnect
+  websocket-default:
+    handler: websockets/default.handler
+    events:
+      - websocket:
+          route: $default
+  websocket-events:
+    handler: websockets/events.handler
+    events:
+      - websocket:
+          route: events
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
@@ -134,6 +162,17 @@ resources:
             KeyType: HASH
           - AttributeName: name
             KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+    WebsocketUserTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${ssm:/user/login/userTable~true}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+        - AttributeName: id
+          KeyType: HASH
         BillingMode: PAY_PER_REQUEST
 #  Outputs:
 #     NewOutput:

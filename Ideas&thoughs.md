@@ -22,7 +22,7 @@ skicka POST
     "issues"
   ],
   "config": {
-    "url": "https://github-server.niklasdeveloper.nu/notification",
+    "url": "https://github-server.niklasdeveloper.nu/notification/",
     "content_type": "json",
     "insecure_ssl": "0"
   }

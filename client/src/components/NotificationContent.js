@@ -28,7 +28,7 @@ const NotificationContent = ({ repo }) => {
         hooksToSet.push(v.toLocaleLowerCase())
       }
     }
-    sendHook(hooksToSet)
+    sendHook(hooksToSet, repo)
   }
 
   return (

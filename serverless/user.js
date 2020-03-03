@@ -1,6 +1,6 @@
 'use strict'
 
-const Dynamo = require('./db/Dynamo')
+const Dynamo = require('./common/Dynamo')
 
 module.exports.handler = async event => {
   const data = JSON.parse(event.body)

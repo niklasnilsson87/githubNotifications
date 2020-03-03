@@ -108,9 +108,50 @@ const GlobalState = props => {
     })
   }
 
-  const sendHook = hooksToSet => {
-    console.log(activeOrg)
+  const sendHook = (hooksToSet, repo) => {
     console.log(hooksToSet)
+    console.log(repo)
+
+    const config = {
+      name: 'web',
+      active: true,
+      events: [
+        'push',
+        'issues',
+        'release'
+      ],
+      config: {
+        url: 'https://github-server.niklasdeveloper.nu/webhook',
+        content_type: 'json',
+        insecure_ssl: 0
+      }
+    }
+
+    window.fetch(repo.hooks_url, {
+      method: 'POST',
+      headers: { Authorization: 'token ' + accessToken },
+      body: JSON.stringify(config)
+    }).then(res => res.json().then(result => {
+      console.log(result)
+      return result
+    })).catch(error => console.log(error))
+
+    const updateSettings = {
+      userID: user.id,
+      repo: {
+        id: repo.id, actions: hooksToSet
+      }
+    }
+
+    const url = 'https://github-server.niklasdeveloper.nu/update'
+    window.fetch(url, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updateSettings)
+    }).catch(error => console.log(error))
   }
 
   return <Store.Provider value={{ user, error, sendHook, activeOrg, setActiveOrganization, userSettings, authenticateToken, setErrorState, initializeApp, getRepos, fetchOrg, logout, orgData, reposData, isAuth, isLoading }}>{props.children}</Store.Provider>

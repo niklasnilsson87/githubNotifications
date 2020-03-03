@@ -1,4 +1,5 @@
 'use strict'
+
 const superagent = require('superagent')
 
 module.exports.token = async event => {
