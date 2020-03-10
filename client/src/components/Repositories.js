@@ -11,7 +11,7 @@ const Repositories = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [reposPerPage] = useState(5)
   const [isLoading, setIsloading] = useState(false)
-  const { reposData } = useContext(Store)
+  const { reposData, user, saveUser } = useContext(Store)
 
   const indexOfLastRepo = currentPage * reposPerPage
   const indexOfFirstRepo = indexOfLastRepo - reposPerPage
@@ -23,6 +23,9 @@ const Repositories = () => {
       setCurrentPage(1)
       setIsloading(false)
     }, 500)
+    if (reposData) {
+      saveUser(user)
+    }
   }, [reposData])
 
   const paginate = (pageNumber) => {
@@ -35,12 +38,12 @@ const Repositories = () => {
       {isLoading ? <div className='center-align'> <img src={logo} alt='Loading' /> </div> : (
         <>
 
-          {reposData.length > 5 && (
+          {/* {reposData.length > 5 && (
             <Pagination reposPerPage={reposPerPage} totalRepos={reposData.length} paginate={paginate} />
-          )}
+          )} */}
           <ul>
-            {currentRepos.map((repo, i) =>
-              <li key={i}>
+            {reposData.map((repo, i) =>
+              <li key={i} className='not-li'>
                 <a className='org-link' target='_blank' rel='noopener noreferrer' href={repo.owner.html_url}>{repo.name}</a>
                 <NotificationContent repo={repo} />
                 <p style={{ marginLeft: '15px' }}>{repo.description || 'No Description'}</p>

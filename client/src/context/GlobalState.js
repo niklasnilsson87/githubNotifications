@@ -63,6 +63,18 @@ const GlobalState = props => {
       saveUser(result)
     ])
     console.log('DONE')
+    const socket = new window.WebSocket(`wss://h9ma6vxrf2.execute-api.us-east-1.amazonaws.com/dev?userid=${result.id}`)
+
+    // Connection opened
+    socket.addEventListener('open', function (event) {
+      console.log('event: ', event)
+      console.log('connected')
+    })
+
+    socket.addEventListener('message', (data) => {
+      console.log(data)
+    })
+
     setIsLoading(false)
 
     const date = new Date()
@@ -109,9 +121,6 @@ const GlobalState = props => {
   }
 
   const sendHook = (hooksToSet, repo) => {
-    console.log(hooksToSet)
-    console.log(repo)
-
     const config = {
       name: 'web',
       active: true,
@@ -132,12 +141,12 @@ const GlobalState = props => {
       headers: { Authorization: 'token ' + accessToken },
       body: JSON.stringify(config)
     }).then(res => res.json().then(result => {
-      console.log(result)
       return result
     })).catch(error => console.log(error))
 
     const updateSettings = {
-      userID: user.id,
+      id: user.id,
+      name: user.name,
       repo: {
         id: repo.id, actions: hooksToSet
       }
@@ -151,10 +160,12 @@ const GlobalState = props => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(updateSettings)
-    }).catch(error => console.log(error))
+    }).then(res => res.json().then(result => {
+      console.log(result)
+    })).catch(error => console.log(error))
   }
 
-  return <Store.Provider value={{ user, error, sendHook, activeOrg, setActiveOrganization, userSettings, authenticateToken, setErrorState, initializeApp, getRepos, fetchOrg, logout, orgData, reposData, isAuth, isLoading }}>{props.children}</Store.Provider>
+  return <Store.Provider value={{ user, error, sendHook, activeOrg, setActiveOrganization, userSettings, authenticateToken, setErrorState, initializeApp, getRepos, fetchOrg, logout, orgData, reposData, isAuth, saveUser, isLoading }}>{props.children}</Store.Provider>
 }
 
 export default GlobalState

@@ -23,6 +23,11 @@ function Dashboard () {
     }
   }, [orgData])
 
+  // useEffect(() => {
+  //   if (user) {
+
+  // }, [user])
+
   function handleChange (event) {
     setSelectedOrg(event.target.value)
     setActiveOrganization(event.target.value)

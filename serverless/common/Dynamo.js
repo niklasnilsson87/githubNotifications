@@ -33,7 +33,6 @@ Dynamo.get = async ({ id, name }, TableName) => {
   }
 
   const data = await documentClient.get(params).promise()
-  console.log('DATAITEM:::::::', data.Item)
   return data.Item
 }
 
@@ -53,6 +52,70 @@ Dynamo.getRecord = async (id, TableName) => {
 
   console.log(data)
   return data.Item
+}
+
+Dynamo.update = async (data, TableName) => {
+  if (!data.id) {
+    throw Error('no ID on the data')
+  }
+
+  const user = await Dynamo.get(data, TableName)
+  const repos = user.repos
+
+  if (data.repo.actions.length === 0) {
+    const update = repos.filter(repo => repo.id !== data.repo.id)
+
+    const updatedData = {
+      ...user,
+      repos: update
+    }
+
+    const res = await Dynamo.write(updatedData, TableName)
+    return res
+  }
+
+  if (repos.length) {
+    const repo = repos.find(r => r.id === data.repo.id)
+    const newRepo = repo
+    if (newRepo) {
+      newRepo.actions = []
+      newRepo.actions = data.repo.actions
+      repos[repos.indexOf(repo)] = newRepo
+    } else {
+      repos.push(data.repo)
+    }
+  } else {
+    repos.push(data.repo)
+  }
+
+  const updatedData = {
+    ...user,
+    repos
+  }
+
+  const res = await Dynamo.write(updatedData, TableName)
+
+  if (!res) {
+    throw Error(`There was an error inserting ID of ${data.id} in table ${TableName}`)
+  }
+}
+
+Dynamo.getAllFromTable = async (TableName) => {
+  const params = {
+    TableName
+  }
+
+  const scanResults = []
+  let items
+
+  do {
+    items = await documentClient.scan(params).promise()
+
+    items.Items.forEach((item) => scanResults.push(item))
+    params.ExclusiveStartKey = items.LastEvaluatedKey
+  } while (items.LastEvaluatedKey !== undefined)
+
+  return scanResults
 }
 
 Dynamo.delete = async (id, TableName) => {

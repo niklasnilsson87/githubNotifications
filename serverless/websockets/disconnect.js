@@ -3,7 +3,7 @@
 const Responses = require('../common/Responses')
 const Dynamo = require('../common/Dynamo')
 
-const tableName = process.env.TABLE_NAME
+const tableName = process.env.WEBSOCKET_TABLE_NAME
 
 exports.handler = async event => {
   console.log('Event: ', event)

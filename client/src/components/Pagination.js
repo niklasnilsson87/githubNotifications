@@ -13,7 +13,7 @@ const Pagination = ({ reposPerPage, totalRepos, paginate }) => {
         <li className='disabled'><i className='material-icons'>chevron_left</i></li>
         {pageNumbers.map(number => (
           <li key={number} className='page-li'>
-            <span onClick={() => paginate(number)} href='!#' className='page-number'>
+            <span onClick={() => paginate(number)} className='page-number'>
               {number}
             </span>
           </li>

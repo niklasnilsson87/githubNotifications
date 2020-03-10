@@ -54,7 +54,8 @@ provider:
   environment:
     CLIENT_ID: ${ssm:/user/login/client-id~true}
     CLIENT_SECRET: ${ssm:/user/login/client-secret~true}
-    TABLE_NAME: ${ssm:/user/login/userTable~true}
+    WEBSOCKET_TABLE_NAME: ${ssm:/user/login/userTable~true}
+    USER_TABLE_NAME: ${ssm:/user/login/settingsTable~true}
 
 # you can add packaging information here
 #package:
@@ -67,23 +68,30 @@ provider:
 
 functions:
   token:
-    handler: handler.token
+    handler: functions/authentication.handler
     events:
       - http:
           path: /user/signin/callback
           method: get
   user:
-    handler: user.handler
+    handler: functions/user.handler
     events:
       - http:
           path: /user
           method: post
           cors: true
   webhook:
-    handler: webhook.handler
+    handler: functions/webhook.handler
     events:
       - http:
           path: /webhook
+          method: post
+          cors: true
+  updateSettings:
+    handler: functions/updateSettings.handler
+    events:
+      - http:
+          path: /update
           method: post
           cors: true
   websocket-connect:

@@ -55,6 +55,26 @@
   justify-content: space-between;
 }
 
+.notification-setting {
+  display: flex;
+  cursor: pointer;
+  margin-right: 20px;
+  float: right;
+}
+
+/* .notification-setting:hover {
+  border-bottom: 1px solid lightgray;
+} */
+
+.not-text:hover {
+  border-bottom: 1px solid lightgray;
+}
+
+.not-li {
+  border-bottom: 1px solid lightgray;
+  padding: 10px;
+}
+
 .flex {
   display: flex;
 }

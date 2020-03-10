@@ -2,7 +2,7 @@
 
 const superagent = require('superagent')
 
-module.exports.token = async event => {
+exports.handler = async event => {
   const { code } = event.queryStringParameters
 
   const client_id = process.env.CLIENT_ID // eslint-disable-line

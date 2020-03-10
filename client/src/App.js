@@ -24,7 +24,10 @@ const App = () => {
 
   useEffect(() => {
     const token = queryString.parse(window.location.search).access_token
-    if (token) {
+    const cookie = getCookie()
+    console.log(cookie, token)
+    if (token && !cookie) {
+      console.log('token no cookie')
       setToken(token)
       authenticateToken(token)
 
@@ -35,20 +38,17 @@ const App = () => {
       } catch (error) {
         setErrorState(error)
       }
-    } else {
-      const cookie = getCookie()
-
-      if (cookie) {
-        setToken(cookie)
-        try {
-          authenticateToken(cookie)
-          initializeApp(cookie)
-        } catch (error) {
-          setErrorState(error)
-        }
+    } else if (cookie && !token) {
+      console.log('cookie no token')
+      setToken(cookie)
+      try {
+        authenticateToken(cookie)
+        initializeApp(cookie)
+      } catch (error) {
+        setErrorState(error)
       }
     }
-  }, [token])
+  }, [])
 
   return (
     <div className='App'>
@@ -56,7 +56,6 @@ const App = () => {
       {isAuth
         ? <Dashboard />
         : <Login />}
-
     </div>
   )
 }
