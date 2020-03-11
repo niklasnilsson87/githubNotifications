@@ -41,6 +41,7 @@ const GlobalState = props => {
   const setActiveOrganization = org => setActiveOrg(org)
 
   const logout = () => {
+    document.cookie = 'token=; Max-Age=0'
     setUser({})
     setOrgData([])
     setToken(null)
@@ -92,7 +93,7 @@ const GlobalState = props => {
     })
     const result = await response.json()
 
-    result.push(user)
+    result.unshift(user)
     setOrgData(result)
   }
 
@@ -101,7 +102,7 @@ const GlobalState = props => {
     if (repo === user.login) {
       url = 'https://api.github.com/user/repos'
     } else {
-      url = `https://api.github.com/orgs/${repo}/repos?page=1&per_page=1000000000`
+      url = `https://api.github.com/orgs/${repo}/repos?page=1&per_page=100`
     }
 
     const response = await window.fetch(url, {

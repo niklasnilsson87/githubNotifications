@@ -2,13 +2,13 @@ import React, { useState, useEffect, useContext } from 'react'
 
 import Store from '../context/store'
 
-const NotificationContent = ({ repo }) => {
+const NotificationContent = ({ repo, isActive, onActivation, index }) => {
   const events = ['Issues', 'Release', 'Push']
-  const [toggle, setToggle] = useState(false)
   const [value, setValue] = useState({ Issues: false, Release: false, Push: false })
   const { sendHook, userSettings } = useContext(Store)
 
   const handleOnChange = e => {
+    console.log(e.target)
     const checked = e.target.checked
     const key = e.target.id
     setValue({
@@ -18,6 +18,7 @@ const NotificationContent = ({ repo }) => {
   }
 
   useEffect(() => {
+    console.log(userSettings.repos.find(e => e.id === repo.id))
     const savedSettings = userSettings.repos.find(e => e.id === repo.id)
     if (savedSettings) {
       setValue(
@@ -28,7 +29,7 @@ const NotificationContent = ({ repo }) => {
           )
       )
     }
-  }, [])
+  }, [isActive])
 
   function capitalizeFirstLetter (string) {
     return string.charAt(0).toUpperCase() + string.slice(1)
@@ -44,17 +45,25 @@ const NotificationContent = ({ repo }) => {
     sendHook(hooksToSet, repo)
   }
 
+  const onToggle = () => {
+    if (isActive) {
+      onActivation(-1)
+    } else {
+      onActivation(index)
+    }
+  }
+
   return (
     <>
       {repo.permissions.admin &&
-        <div onClick={() => setToggle(!toggle)} className='notification-setting'>
+        <div onClick={onToggle} className='notification-setting'>
           <span className='not-text'>Edit Notifications</span>
           <i className='material-icons grey-text pointer'>arrow_drop_down</i>
         </div>}
-      {toggle && (
+      {isActive && (
         <div>
           {events.map((e, i) =>
-            <div key={i} className={toggle ? 'collapseActive' : 'collapse'}>
+            <div key={i}>
               <div className='not-container'>
                 <p>{e}</p>
                 <div className='switch'>
@@ -64,6 +73,7 @@ const NotificationContent = ({ repo }) => {
                       type='checkbox'
                       checked={value[e]}
                       id={e}
+                      className={e}
                       onChange={handleOnChange}
                     />
                     <span className='lever' />
