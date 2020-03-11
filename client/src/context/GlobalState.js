@@ -61,7 +61,8 @@ const GlobalState = props => {
     setUser(result)
     await Promise.all([
       fetchOrg(token, result),
-      saveUser(result)
+      saveUser(result),
+      fetchEvents(token)
     ])
     console.log('DONE')
     const socket = new window.WebSocket(`wss://h9ma6vxrf2.execute-api.us-east-1.amazonaws.com/dev?userid=${result.id}`)
@@ -94,7 +95,19 @@ const GlobalState = props => {
     const result = await response.json()
 
     result.unshift(user)
+    console.log(result)
     setOrgData(result)
+  }
+
+  const fetchEvents = async (token) => {
+    const url = 'https://api.github.com/users/niklasnilsson87/events'
+    const response = await window.fetch(url, {
+      headers: {
+        Authorization: 'token ' + token
+      }
+    })
+    const result = await response.json()
+    console.log(result)
   }
 
   const getRepos = async (repo) => {

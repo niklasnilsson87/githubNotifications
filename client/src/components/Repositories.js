@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from 'react'
 
 import Store from '../context/store'
 
-import Pagination from './Pagination'
 import Paginate from 'react-paginate'
 import NotificationContent from './NotificationContent'
 
@@ -11,7 +10,7 @@ import logo from '../img/giphy.gif'
 const Repositories = () => {
   const [isLoading, setIsloading] = useState(false)
   const [offset, setOffset] = useState(0)
-  const [perPage, setPerPage] = useState(5)
+  const [perPage] = useState(5)
   const [repos, setRepos] = useState([])
   const [activeIndex, setActiveIndex] = useState(-1)
   const { reposData, user, saveUser } = useContext(Store)

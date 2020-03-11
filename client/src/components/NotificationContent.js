@@ -18,7 +18,6 @@ const NotificationContent = ({ repo, isActive, onActivation, index }) => {
   }
 
   useEffect(() => {
-    console.log(userSettings.repos.find(e => e.id === repo.id))
     const savedSettings = userSettings.repos.find(e => e.id === repo.id)
     if (savedSettings) {
       setValue(

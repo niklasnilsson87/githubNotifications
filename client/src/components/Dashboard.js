@@ -10,6 +10,7 @@ import logo from '../img/giphy.gif'
 import Notifications from './Notifications'
 import Settings from './Settings'
 import Repositories from './Repositories'
+import Chart from './Chart.js'
 
 function Dashboard () {
   const {
@@ -90,7 +91,8 @@ function Dashboard () {
                   <Switch>
                     <Route exact path='/'>
                       <h2 className='center-align'>Dashboard</h2>
-                      <ul>
+                      <Chart />
+                      {/* <ul>
                         {orgData.length
                           ? orgData.map((o, i) => (
                             <li key={i}>
@@ -115,7 +117,7 @@ function Dashboard () {
                             </li>
                           ))
                           : ''}
-                      </ul>
+                      </ul> */}
                     </Route>
                     <Route path='/notifications'>
                       <Notifications />
