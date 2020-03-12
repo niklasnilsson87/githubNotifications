@@ -58,7 +58,7 @@ const Repositories = () => {
           <ul>
             {repos.map((repo, i) =>
               <li key={i} className='not-li'>
-                <div className='flex align-center'>
+                <div className='inline-flex align-center'>
                   <span className='org-link'>{repo.name}</span>
                   <a className='org-link flex' target='_blank' rel='noopener noreferrer' href={repo.owner.html_url}><i className='material-icons'>open_in_new</i></a>
                 </div>

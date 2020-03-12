@@ -11,12 +11,12 @@ const GlobalState = props => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState({})
   const [userSettings, setUserSettings] = useState({})
+  const [socket, setSocket] = useState(null)
 
   const saveUser = async (user) => {
     const data = {
       id: user.id,
-      name: user.name,
-      slackUrl: 'empty'
+      name: user.name
     }
 
     const config = {
@@ -30,6 +30,29 @@ const GlobalState = props => {
 
     const response = await window.fetch('https://github-server.niklasdeveloper.nu/user', config)
     const result = await response.json()
+    console.log(result)
+    setUserSettings(result)
+  }
+
+  const saveUrl = async (slackUrl) => {
+    const data = {
+      id: user.id,
+      name: user.name,
+      slackUrl: slackUrl
+    }
+
+    const config = {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }
+
+    const url = 'https://github-server.niklasdeveloper.nu/saveUrl'
+    const response = await window.fetch(url, config)
+    const result = await response.json()
     setUserSettings(result)
   }
 
@@ -42,8 +65,14 @@ const GlobalState = props => {
 
   const logout = () => {
     document.cookie = 'token=; Max-Age=0'
+    socket.close()
     setUser({})
     setOrgData([])
+    setReposData([])
+    setUserSettings({})
+    setError({})
+    setActiveOrg('')
+    setSocket(null)
     setToken(null)
     setIsAuth(false)
   }
@@ -57,31 +86,30 @@ const GlobalState = props => {
       }
     })
     const result = await response.json()
-
+    result.repo = true
     setUser(result)
     await Promise.all([
       fetchOrg(token, result),
-      saveUser(result),
-      fetchEvents(token)
+      saveUser(result)
     ])
-    console.log('DONE')
     const socket = new window.WebSocket(`wss://h9ma6vxrf2.execute-api.us-east-1.amazonaws.com/dev?userid=${result.id}`)
 
-    // Connection opened
-    socket.addEventListener('open', function (event) {
-      console.log('event: ', event)
-      console.log('connected')
+    socket.addEventListener('open', () => {
+      console.log('Connected to WSS')
     })
 
     socket.addEventListener('message', (data) => {
       console.log(data)
     })
 
+    setSocket(socket)
+    setCookie(token)
     setIsLoading(false)
+  }
 
+  const setCookie = (token) => {
     const date = new Date()
     date.setTime(date.getTime() + (1 * 60 * 60 * 1000))
-
     document.cookie = 'token=' + token + '; expires=' + date.toUTCString()
   }
 
@@ -95,19 +123,18 @@ const GlobalState = props => {
     const result = await response.json()
 
     result.unshift(user)
-    console.log(result)
     setOrgData(result)
   }
 
-  const fetchEvents = async (token) => {
-    const url = 'https://api.github.com/users/niklasnilsson87/events'
+  const fetchEvents = async () => {
+    const url = `https://api.github.com/orgs/${activeOrg}/events?page=1&per_page=100`
     const response = await window.fetch(url, {
       headers: {
-        Authorization: 'token ' + token
+        Authorization: 'token ' + accessToken
       }
     })
     const result = await response.json()
-    console.log(result)
+    return result
   }
 
   const getRepos = async (repo) => {
@@ -179,7 +206,7 @@ const GlobalState = props => {
     })).catch(error => console.log(error))
   }
 
-  return <Store.Provider value={{ user, error, sendHook, activeOrg, setActiveOrganization, userSettings, authenticateToken, setErrorState, initializeApp, getRepos, fetchOrg, logout, orgData, reposData, isAuth, saveUser, isLoading }}>{props.children}</Store.Provider>
+  return <Store.Provider value={{ user, error, saveUrl, fetchEvents, sendHook, activeOrg, setActiveOrganization, userSettings, authenticateToken, setErrorState, initializeApp, getRepos, fetchOrg, logout, orgData, reposData, isAuth, saveUser, isLoading }}>{props.children}</Store.Provider>
 }
 
 export default GlobalState

@@ -60,6 +60,7 @@ Dynamo.update = async (data, TableName) => {
   }
 
   const user = await Dynamo.get(data, TableName)
+
   const repos = user.repos
 
   if (data.repo.actions.length === 0) {

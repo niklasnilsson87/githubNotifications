@@ -42,6 +42,7 @@ const NotificationContent = ({ repo, isActive, onActivation, index }) => {
       }
     }
     sendHook(hooksToSet, repo)
+    onActivation(-1)
   }
 
   const onToggle = () => {
@@ -56,8 +57,9 @@ const NotificationContent = ({ repo, isActive, onActivation, index }) => {
     <>
       {repo.permissions.admin &&
         <div onClick={onToggle} className='notification-setting'>
-          <span className='not-text'>Edit Notifications</span>
-          <i className='material-icons grey-text pointer'>arrow_drop_down</i>
+          <button className='btn'>Edit Notifications
+            <i className='material-icons white-text'>arrow_drop_down</i>
+          </button>
         </div>}
       {isActive && (
         <div>

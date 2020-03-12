@@ -5,7 +5,7 @@ import './App.css'
 import Store from './context/store'
 import queryString from 'query-string'
 
-import Dashboard from './components/Dashboard.js'
+import Home from './components/Home'
 import Login from './components/Login.js'
 import Header from './components/Header'
 
@@ -54,7 +54,7 @@ const App = () => {
     <div className='App'>
       <Header />
       {isAuth
-        ? <Dashboard />
+        ? <Home />
         : <Login />}
     </div>
   )

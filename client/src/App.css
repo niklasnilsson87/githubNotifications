@@ -58,6 +58,10 @@
   margin-top: 50px;
 }
 
+.pagination li a {
+  cursor: pointer;
+}
+
 .page li {
   margin-left: 10px;
   cursor: pointer;
@@ -117,6 +121,14 @@
 .font-size20-text-white {
   font-size: 20px;
   color: white;
+}
+
+.font-size20 {
+  font-size: 20px;
+}
+
+.inline-flex {
+  display: inline-flex;
 }
 
 .flex-wrap {

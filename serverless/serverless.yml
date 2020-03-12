@@ -80,6 +80,13 @@ functions:
           path: /user
           method: post
           cors: true
+  saveUrl:
+    handler: functions/saveUrl.handler
+    events:
+      - http:
+          path: /saveUrl
+          method: post
+          cors: true
   webhook:
     handler: functions/webhook.handler
     events:
