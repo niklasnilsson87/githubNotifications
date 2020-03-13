@@ -24,6 +24,7 @@ Dynamo.write = async (data, TableName) => {
 }
 
 Dynamo.get = async ({ id, name }, TableName) => {
+  console.log(id, name)
   const params = {
     TableName,
     Key: {

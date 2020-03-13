@@ -8,7 +8,9 @@ const Header = () => {
   return (
     <nav className='light-blue lighten-1' role='navigation'>
       <div className='nav-wrapper container flex justify-between align-center'><a id='logo-container' href='#' className='logo'>Github Notifications</a>
-        <button className='btn' onClick={() => context.logout()}>Logout</button>
+        {context.isAuth && (
+          <button className='btn' onClick={() => context.logout()}>Logout</button>
+        )}
       </div>
     </nav>
   )

@@ -71,7 +71,7 @@ const Home = () => {
                 <Navigation />
               </div>
             </div>
-            <div className='col s10 blue main-layout'>
+            <div className='col s10 blue lighten-1 main-layout'>
               <div className='container'>
                 <div className='flex align-center margin-top50 justify-between'>
                   <label className='white-text' htmlFor='org-selector'>

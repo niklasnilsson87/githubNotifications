@@ -8,7 +8,6 @@ const NotificationContent = ({ repo, isActive, onActivation, index }) => {
   const { sendHook, userSettings } = useContext(Store)
 
   const handleOnChange = e => {
-    console.log(e.target)
     const checked = e.target.checked
     const key = e.target.id
     setValue({

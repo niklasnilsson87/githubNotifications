@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext } from 'react'
 import Store from '../context/store'
 
 const Settings = () => {
@@ -11,10 +11,6 @@ const Settings = () => {
       setUrl('')
     }
   }
-
-  useEffect(() => {
-    console.log(userSettings)
-  }, [userSettings])
 
   return (
     <div>

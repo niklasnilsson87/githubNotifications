@@ -87,6 +87,13 @@ functions:
           path: /saveUrl
           method: post
           cors: true
+  deleteNotifications:
+    handler: functions/deleteNotifications.handler
+    events:
+      - http:
+          path: /deleteNotifications
+          method: delete
+          cors: true
   webhook:
     handler: functions/webhook.handler
     events:
@@ -116,11 +123,6 @@ functions:
     events:
       - websocket:
           route: $default
-  websocket-events:
-    handler: websockets/events.handler
-    events:
-      - websocket:
-          route: events
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

@@ -1,16 +1,20 @@
 import React, { useContext, useState, useEffect } from 'react'
-// import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import './App.css'
 
 import Store from './context/store'
 import queryString from 'query-string'
 
+import 'react-notifications/lib/notifications.css'
+import { NotificationContainer } from 'react-notifications'
+
 import Home from './components/Home'
 import Login from './components/Login.js'
 import Header from './components/Header'
 
+import Websocket from './components/Websocket'
+
 const App = () => {
-  const { initializeApp, authenticateToken, setErrorState, isAuth } = useContext(Store)
+  const { initializeApp, authenticateToken, setErrorState, isAuth, user, setSocket, handleNotifications } = useContext(Store)
   const [token, setToken] = useState('')
 
   const getCookie = () => {
@@ -25,9 +29,7 @@ const App = () => {
   useEffect(() => {
     const token = queryString.parse(window.location.search).access_token
     const cookie = getCookie()
-    console.log(cookie, token)
     if (token && !cookie) {
-      console.log('token no cookie')
       setToken(token)
       authenticateToken(token)
 
@@ -39,7 +41,6 @@ const App = () => {
         setErrorState(error)
       }
     } else if (cookie && !token) {
-      console.log('cookie no token')
       setToken(cookie)
       try {
         authenticateToken(cookie)
@@ -54,7 +55,13 @@ const App = () => {
     <div className='App'>
       <Header />
       {isAuth
-        ? <Home />
+        ? (
+          <>
+            <Home />
+            <Websocket user={user} handleNotifications={handleNotifications} setSocketGlobal={setSocket} />
+            <NotificationContainer />
+          </>
+        )
         : <Login />}
     </div>
   )

@@ -97,7 +97,6 @@ function createPayload (data, event) {
         url: data.repository.url,
         sender: data.sender.login,
         repoName: data.repository.name,
-        repoId: data.repository.id,
         commit: data.head_commit.message,
         text: `*Name:* ${data.sender.login}\n*Event:* ${event}\n*Repository:* ${data.repository.name}\n*Commit Message:* ${data.head_commit.message}`
       }
