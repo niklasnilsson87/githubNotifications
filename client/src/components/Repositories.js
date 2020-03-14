@@ -38,7 +38,7 @@ const Repositories = () => {
   }
 
   return (
-    <div>
+    <div className='main-area'>
       <h2 className='center-align'>Repositories</h2>
       {isLoading ? <div className='center-align'> <img src={logo} alt='Loading' /> </div> : (
         <>
@@ -60,10 +60,10 @@ const Repositories = () => {
               <li key={i} className='not-li'>
                 <div className='inline-flex align-center'>
                   <span className='org-link'>{repo.name}</span>
-                  <a className='org-link flex' target='_blank' rel='noopener noreferrer' href={repo.owner.html_url}><i className='material-icons'>open_in_new</i></a>
+                  <a className='org-link flex' target='_blank' rel='noopener noreferrer' href={repo.owner.html_url}><i className='material-icons font-size-inherit'>open_in_new</i></a>
                 </div>
                 <NotificationContent repo={repo} isActive={activeIndex === i} onActivation={setActiveIndex} index={i} />
-                <p style={{ marginLeft: '15px' }}>{repo.description || 'No Description'}</p>
+                <p style={{ marginLeft: '15px', fontSize: '90%' }}>{repo.description || 'No Description'}</p>
               </li>)}
           </ul>
         </>

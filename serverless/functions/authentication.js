@@ -22,7 +22,7 @@ exports.handler = async event => {
   return {
     statusCode: 303,
     headers: {
-      Location: `http://localhost:3000/dashboard?access_token=${access_token}` // eslint-disable-line
+      Location: `https://github.niklasdeveloper.nu/dashboard?access_token=${access_token}` // eslint-disable-line
     }
   }
 }

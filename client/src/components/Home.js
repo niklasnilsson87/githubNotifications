@@ -57,7 +57,7 @@ const Home = () => {
           <div className='flex flex-wrap row margin-bottom-0'>
             <div className='col s2 grey darken-3 dashboard-sidebar'>
               <div className='user-container'>
-                <p className='font-size20-text-white mb-2'>
+                <p className='white-text mb-2'>
                   Welcome {user.name}
                 </p>
                 <img

@@ -27,7 +27,7 @@ const Chart = ({ isUser }) => {
   const userDashboard = () => (
     <div className='flex justify-space-evenly'>
       <BarChart
-        width={600} height={300} data={data}
+        width={500} height={300} data={data}
         margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
       >
         <XAxis dataKey='name' />

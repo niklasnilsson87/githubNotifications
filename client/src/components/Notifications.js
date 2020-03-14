@@ -18,13 +18,13 @@ const Notifications = () => {
   }
 
   return (
-    <div>
+    <div className='main-area'>
       <h2 className='center-align'>Notifications</h2>
       {
         notifications.map((n, i) => (
           <div key={i} className='container'>
             <div className='teal lighten-3 card-panel white-text'>
-              <div className='flex justify-between' style={{ maxWidth: '60%' }}>
+              <div className='flex justify-between' style={{ maxWidth: '80%' }}>
                 <div>
                   <p>Event: {capitalizeFirstLetter(n.event)}</p>
                   {n.action && <p>Action: {n.action}</p>}

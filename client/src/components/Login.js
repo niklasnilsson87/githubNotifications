@@ -12,7 +12,7 @@ const Login = () => {
         <div className='card-content'>
           <a
             href={`https://github.com/login/oauth/authorize?client_id=${clientID}&scope=user,repo,admin:org_hook,admin:repo_hook`}
-            className='btn grey darken-4'
+            className='btn-small grey darken-4'
           >
             Login to GitHub
           </a>

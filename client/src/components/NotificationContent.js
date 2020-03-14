@@ -56,7 +56,7 @@ const NotificationContent = ({ repo, isActive, onActivation, index }) => {
     <>
       {repo.permissions.admin &&
         <div onClick={onToggle} className='notification-setting'>
-          <button className='btn'>Edit Notifications
+          <button className='btn-small btn-xs flex align-center'>Edit Notifications
             <i className='material-icons white-text'>arrow_drop_down</i>
           </button>
         </div>}
@@ -65,7 +65,7 @@ const NotificationContent = ({ repo, isActive, onActivation, index }) => {
           {events.map((e, i) =>
             <div key={i}>
               <div className='not-container'>
-                <p>{e}</p>
+                <p style={{ fontSize: '12px' }}>{e}</p>
                 <div className='switch'>
                   <label htmlFor={e}>
                     Off
@@ -83,7 +83,7 @@ const NotificationContent = ({ repo, isActive, onActivation, index }) => {
               </div>
             </div>
           )}
-          <button onClick={handleSubmit} className='btn'>Save Hook</button>
+          <button onClick={handleSubmit} className='btn-small btn-xs' style={{ marginLeft: '20px' }}>Save Hook</button>
         </div>
       )}
     </>

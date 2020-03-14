@@ -4,7 +4,7 @@ import Chart from './Chart.js'
 
 function Dashboard ({ isUser }) {
   return (
-    <div className='dashboard'>
+    <div className='dashboard main-area'>
       <h2 className='center-align'>Dashboard</h2>
       <Chart isUser={isUser} />
     </div>
