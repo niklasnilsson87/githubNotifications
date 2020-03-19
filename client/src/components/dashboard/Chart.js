@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import Store from '../context/store'
+import Store from '../../context/store'
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
 

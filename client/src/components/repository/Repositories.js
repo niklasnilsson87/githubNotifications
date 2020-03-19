@@ -1,11 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react'
 
-import Store from '../context/store'
+import Store from '../../context/store'
 
 import Paginate from 'react-paginate'
 import NotificationContent from './NotificationContent'
 
-import logo from '../img/giphy.gif'
+import logo from '../../img/giphy.gif'
 
 const Repositories = () => {
   const [isLoading, setIsloading] = useState(false)

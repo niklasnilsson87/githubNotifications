@@ -2,34 +2,38 @@
 
 const AWS = require('aws-sdk')
 const superagent = require('superagent')
+const crypto = require('crypto')
 const Responses = require('../common/Responses')
 const Dynamo = require('../common/Dynamo')
 
-const tableName = process.env.WEBSOCKET_TABLE_NAME
+const secret = process.env.SECRET_SIGNATURE
+const socketTable = process.env.WEBSOCKET_TABLE_NAME
+const tableName = process.env.USER_TABLE_NAME
 
 exports.handler = async event => {
+  verifySignature(event)
   const githubEvent = event.headers['X-GitHub-Event']
 
-  const githubHook = JSON.parse(event.body)
-  const hookRepoId = githubHook.repository.id
+  const githubPayload = JSON.parse(event.body)
+  const hookRepoId = githubPayload.repository.id
 
-  const users = await Dynamo.getAllFromTable('usersTable')
+  const users = await Dynamo.getAllFromTable(tableName)
   const subscribedUsers = users.filter(user => user.repos
     .find(repo => repo.id === hookRepoId && repo.actions
       .includes(githubEvent)))
 
   if (subscribedUsers.length) {
-    const connectionIDs = await Dynamo.getAllFromTable(tableName)
+    const connectionIDs = await Dynamo.getAllFromTable(socketTable)
 
     for (let i = 0; i < subscribedUsers.length; i++) {
       const user = subscribedUsers[i]
 
-      const conn = connectionIDs.find(c => parseInt(c.user_id) === user.id)
-      const payload = createPayload(githubHook, githubEvent)
+      const connection = connectionIDs.find(c => parseInt(c.user_id) === user.id)
+      const payload = createPayload(githubPayload, githubEvent)
 
-      if (conn) {
+      if (connection) {
         try {
-          await send(payload, conn)
+          await sendToClient(payload, connection)
         } catch (error) {
           console.log({ error })
         }
@@ -40,6 +44,7 @@ exports.handler = async event => {
             .send({
               message: payload.text
             })
+
           const events = user.events
           events.push(payload)
 
@@ -48,9 +53,10 @@ exports.handler = async event => {
             events
           }
 
-          await Dynamo.write(data, 'usersTable')
+          await Dynamo.write(data, tableName)
         } catch (error) {
           console.log({ error })
+          console.log({ event })
         }
       }
     }
@@ -59,7 +65,18 @@ exports.handler = async event => {
   return Responses._200({ message: 'OK' })
 }
 
-function create () {
+function verifySignature (event) {
+  const signature = event.headers['x-hub-signature'] || event.headers['X-Hub-Signature']
+  console.log('signature :', signature)
+  const hmac = crypto.createHmac('sha1', secret)
+  hmac.update(event.body, 'binary')
+  const expected = 'sha1=' + hmac.digest('hex')
+  if (signature.length !== expected.length || crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected))) {
+    return Responses._401({ message: 'Mismatched signatures' })
+  }
+}
+
+function createSocket () {
   const endpoint = 'h9ma6vxrf2.execute-api.us-east-1.amazonaws.com/dev'
   return new AWS.ApiGatewayManagementApi({
     apiVersion: '2018-11-29',
@@ -67,12 +84,12 @@ function create () {
   })
 }
 
-function send (githubHook, conn) {
-  const ws = create()
+function sendToClient (githubPayload, connection) {
+  const ws = createSocket()
 
   const postParams = {
-    Data: JSON.stringify(githubHook),
-    ConnectionId: conn.id
+    Data: JSON.stringify(githubPayload),
+    ConnectionId: connection.id
   }
 
   return ws.postToConnection(postParams).promise()

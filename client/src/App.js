@@ -9,7 +9,7 @@ import { NotificationContainer } from 'react-notifications'
 
 import Home from './components/Home'
 import Login from './components/Login.js'
-import Header from './components/Header'
+import Header from './components/partials/Header'
 
 import Websocket from './components/Websocket'
 

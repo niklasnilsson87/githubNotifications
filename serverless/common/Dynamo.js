@@ -24,7 +24,6 @@ Dynamo.write = async (data, TableName) => {
 }
 
 Dynamo.get = async ({ id, name }, TableName) => {
-  console.log(id, name)
   const params = {
     TableName,
     Key: {
@@ -51,7 +50,6 @@ Dynamo.getRecord = async (id, TableName) => {
     throw Error(`There was an error fetching the data for ID of ${id} from ${TableName}`)
   }
 
-  console.log(data)
   return data.Item
 }
 

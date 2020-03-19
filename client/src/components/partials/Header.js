@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 
-import Store from '../context/store'
+import Store from '../../context/store'
 
 const Header = () => {
   const context = useContext(Store)

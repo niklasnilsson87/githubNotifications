@@ -112,7 +112,6 @@ const GlobalState = props => {
   }
 
   function handleNotifications (not) {
-    console.log(not)
     NotificationManager.info(`${not.sender} made an ${not.event} on repo ${not.repoName}`, 'Notification')
     setNotifications([...ref.current, not])
   }
@@ -155,11 +154,8 @@ const GlobalState = props => {
       url = `https://api.github.com/orgs/${repo}/repos?page=1&per_page=100`
     }
 
-    const response = await window.fetch(url, {
-      headers: {
-        Authorization: 'token ' + accessToken
-      }
-    })
+    const response = await window.fetch(url,
+      { headers: { Authorization: 'token ' + accessToken } })
     const result = await response.json()
     setReposData(result)
   }
@@ -172,29 +168,52 @@ const GlobalState = props => {
   }
 
   const sendHook = (hooksToSet, repo) => {
-    const config = {
-      name: 'web',
-      active: true,
-      events: ['push', 'issues', 'release'],
-      config: {
-        url: 'https://github-server.niklasdeveloper.nu/webhook',
-        content_type: 'json',
-        insecure_ssl: 0
-      }
+    console.log(repo)
+    const hook = {
+      url: repo.hooks_url,
+      accessToken: accessToken
     }
 
-    window
-      .fetch(repo.hooks_url, {
-        method: 'POST',
-        headers: { Authorization: 'token ' + accessToken },
-        body: JSON.stringify(config)
+    console.log('sending hooks to registerWebhook')
+
+    const webhookUrl = 'https://github-server.niklasdeveloper.nu/registerWebhook'
+    window.fetch(webhookUrl, {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      mode: 'cors',
+      body: JSON.stringify(hook)
+    }).then(res => res.json()
+      .then(result => {
+        return result
       })
-      .then(res =>
-        res.json().then(result => {
-          return result
-        })
-      )
-      .catch(error => console.log(error))
+    ).catch(error => console.log(error))
+
+    // const config = {
+    //   name: 'web',
+    //   active: true,
+    //   events: ['push', 'issues', 'release'],
+    //   config: {
+    //     url: 'https://github-server.niklasdeveloper.nu/webhook',
+    //     content_type: 'json',
+    //     insecure_ssl: 0
+    //   }
+    // }
+
+    // window.fetch(repo.hooks_url, {
+    //   method: 'POST',
+    //   headers: { Authorization: 'token ' + accessToken },
+    //   body: JSON.stringify(config)
+    // }).then(res =>
+    //   res.json()
+    //     .then(result => {
+    //       return result
+    //     })
+    // ).catch(error => console.log(error))
+
+    console.log('updating state')
 
     const updateSettings = {
       id: user.id,
@@ -206,33 +225,29 @@ const GlobalState = props => {
     }
 
     const url = 'https://github-server.niklasdeveloper.nu/update'
-    window
-      .fetch(url, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updateSettings)
-      })
-      .then(res =>
-        res.json().then(result => {
+    window.fetch(url, {
+      method: 'POST',
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updateSettings)
+    })
+      .then(res => res.json()
+        .then(result => {
           console.log(result)
           NotificationManager.success('Settings saved')
         })
-      )
-      .catch(error => console.log(error))
+      ).catch(error => console.log(error))
   }
 
   const deleteNotifications = async () => {
     if (userSettings.events.length) {
       const url = `https://github-server.niklasdeveloper.nu/deleteNotifications?id=${user.id}&name=${user.name}`
-      console.log('sending delete')
       const request = await window.fetch(url, {
         method: 'DELETE'
       })
       const response = await request.json()
-      console.log(response)
       setUserSettings(response.obj)
     }
     setNotifications([])

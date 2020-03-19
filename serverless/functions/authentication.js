@@ -20,7 +20,7 @@ exports.handler = async event => {
     const { access_token } = response.body // eslint-disable-line
 
   return {
-    statusCode: 303,
+    statusCode: 301,
     headers: {
       Location: `https://github.niklasdeveloper.nu/dashboard?access_token=${access_token}` // eslint-disable-line
     }

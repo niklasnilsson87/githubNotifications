@@ -4,11 +4,11 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Store from '../context/store'
 import logo from '../img/giphy.gif'
 
-import Navigation from './Navigation'
+import Navigation from './partials/Navigation'
 import Notifications from './Notifications'
 import Settings from './Settings'
-import Repositories from './Repositories'
-import Dashboard from './Dashboard'
+import Repositories from './repository/Repositories'
+import Dashboard from './dashboard/Dashboard'
 
 const Home = () => {
   const {

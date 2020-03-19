@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 
-import Store from '../context/store'
+import Store from '../../context/store'
 
 const NotificationContent = ({ repo, isActive, onActivation, index }) => {
   const events = ['Issues', 'Release', 'Push']

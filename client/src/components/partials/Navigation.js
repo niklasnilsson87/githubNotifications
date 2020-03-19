@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 
 import { Link } from 'react-router-dom'
-import Store from '../context/store'
+import Store from '../../context/store'
 
 const Navigation = () => {
   const { notifications } = useContext(Store)
